@@ -1,0 +1,57 @@
+------------------------------------------------------------------------
+ (extension[1:] - to input sdf instead of .sdf as an argument)
+ (next is used to - "advance an iterator by one place (without letting 
+   it control a whole for loop)" and "to get just the first item from an 
+   iterator")
+
+ pybel.readfile(format, filename) - Iterate over the molecules in a file, 
+   i.e. create the molecule object by reading the molecule(s) from an 
+   input file.
+
+    - You can access the first molecule in a file using the next() method 
+      of the iterator:
+      mol = pybel.readfile("smi", "myfile.smi").next()
+
+    - You can make a list of the molecules in a file using:
+      mols = list(pybel.readfile("smi", "myfile.smi"))
+
+    - You can iterate over the molecules in a file as shown in the 
+      following code snippet:
+      ----------------------------
+      atomtotal = 0
+      moltotal = 0
+      for mols in pybel.readfile(extension[1:], filename):
+         atomtotal = atomtotal + len(mols.atoms)
+         moltotal = moltotal + 1
+         print (atomtotal)
+         print (moltotal)
+
+ len(mol.atoms) - gives the number of atoms in the molecule
+ mol is the pybel object created to hold the information about the
+   molecule.
+------------------------------------------------------------------------
+
+-----------------------------------------------------------------------
+ pybel.ob is the way to access the openbabel routines from
+   witing a python script.
+ 
+ OBRotorlist - Given an OBMol, set up a list of possibly rotatable 
+   torsions
+
+ OBRotorList().Setup() - Setup the rotor list for the supplied molecule.
+                         This method calls FindRotors(), SetEvalAtoms(), 
+                         and AssignTorVals().
+
+                         Parameters:
+                         moL - The molecule.
+
+                         Returns:
+                         True if rotatable bonds were found. 
+
+ OBRotorList().Size() - 
+                         Returns:
+                         the number of rotors in this list
+
+ OBRotorList().Size() is a t_size. So, int(OBRotorList().Size()) 
+   converts it to integer
+-----------------------------------------------------------------------
