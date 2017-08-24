@@ -10,6 +10,27 @@ from pybel import ob
 #random.seed(0)
 #numpy.random.seed(0)
 
+# function for determining the lowest energy conformer using different
+# methods that are available in openbabe. These conformers/energies can
+# used as a test for the SPSA optimization.
+def bestconformers(testmolecule, bestenergies):
+    force_field = pybel._forcefields["mmff94"]
+    force_field.SetCoordinates(mol.OBMol)
+
+    outputxyz = open(OpenBabelEnergies.xyz, 'a')
+    outputtxt = open(MethodsUsed.txt, 'a')
+    #determine energy
+    #write coordinates and energies to xyz file
+    
+    # n
+    # energy
+    # coords ... 
+
+    # also, open and print file with names of methods used, in order used
+
+    outputxyz.close()
+    outputtxt.close()
+
 # function to write the coordinates for each step in the optimization
 # to an .xyz file:
 def writesxyz(molecule, fname, energy):
@@ -50,6 +71,7 @@ def writesarray(array, dim, fname, arrayname):
 
 
 # function to generate the random perturbation vector:
+# (by assigning a vector and populating it with random numbers)
 def Bernoulli(a, p):
     for i in range (0, p, 1):
         a[i] = random.random()
@@ -60,6 +82,17 @@ def Bernoulli(a, p):
     
     return a
 
+# using Bernoulli(a,p)
+ #b = [0.0]*10
+ #b = Bernoulli(b, 10)
+ #print (b)
+  
+ #c = numpy.empty(10, dtype=numpy.float64)
+ #c = Bernoulli(c, 10)
+ #print(c)
+
+# function to generate the random perturbation vector 
+#(by creating an array of random numbers):
 #def Bernoulli_numpy_array (a, p):
 #    for i in range (0, p, 1):
 #        print ('{0:.4f}'.format(a[i]))
@@ -71,14 +104,7 @@ def Bernoulli(a, p):
 #
 #    return a
 
-#b = [0.0]*10
-#b = Bernoulli(b, 10)
-#print (b)
-
-#c = numpy.empty(10, dtype=numpy.float64)
-#c = Bernoulli(c, 10)
-#print(c)
-
+# using Bernoulli_numpy_array(a,p):
 #d = numpy.random.random(10)
 #d = Bernoulli_numpy_array(d,10)
 #print (d)
