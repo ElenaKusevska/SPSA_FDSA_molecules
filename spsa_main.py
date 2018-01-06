@@ -25,11 +25,8 @@ random.seed(0)
 # set up openbabel and read molecule from input file:
 #-----------------------------------------------------
 
-# global variable for the MMFF94 force field
-force_field = pybel._forcefields["mmff94"] 
-
 # Check if the the correct number of commandline arguments has been used,
-# as in:    dihedrals.py  filename.sdf :
+# as in:    python3 spsa_main.py  filename.sdf :
 if (sys.argv) != 2:
     exit
 
@@ -39,8 +36,10 @@ extension = os.path.splitext(filename)[1]
 mol = next(pybel.readfile(extension[1:], filename))
 print("Molecule read. Number of atoms: ", len(mol.atoms))
 
-# Check if the force field can be set up for this molecule before
-# continuing further:
+# global variable for the MMFF94 force field
+force_field = pybel._forcefields["mmff94"]
+
+# Check if the force field can be set up for this molecule:
 if force_field.Setup(mol.OBMol) is False:
     print("Cannot set up MMFF94 force field, exiting")
     exit()
@@ -63,36 +62,31 @@ while rotor is not None:
     angle = rotor.CalcTorsion(coords_current)
     angles[i] = angle
     rotors.append(rotor)
+    rotors[i].SetToAngle(coords_current, angle)
     rotor = rl.NextRotor(rotIterator)
     i = i + 1
 
-#-------------------------will be deleted---------------------------
-# choose some random angles, so that we are not starting 
-# too close to a minimum:
-for i in range(0, p, 1):
-    angle = random.uniform(0, 2.0*math.pi)
-    angles[i] = angle
-    rotors[i].SetToAngle(coords_current, angle)
-
-# update the coordinates and re-compute the energy
+# update the coordinates and compute the energy
 mol.OBMol.SetCoordinates(coords_current)
 force_field.SetCoordinates(mol.OBMol)
 E_old = force_field.Energy(False) # false = don't compute gradients
-#-------------------------------------------------------------------
  
 # Write first set of coordinates to file:
-outputname1 = 'optimization_steps.xyz'
-if os.path.isfile('./' + outputname1):
-    print( 'file 1 found and deleted' )
-    os.remove('./' + outputname1)
+outputname1 = 'optimization_steps'
+if os.path.isfile('./' + outputname1 + '.xyz'):
+    os.remove('./' + outputname1 + '.xyz')
+    print( outputname1 + '.xyz', ' found and deleted' )
 spsa_routines.writesxyz(mol, outputname1, E_old)
 
 # Write first set of dihedrals and energy to a file:
 outputname2 = 'angles_energies.txt'
 if os.path.isfile('./' + outputname2):
-    print( 'file 2 found and deleted' )
     os.remove('./' + outputname2)
+    print( outputname2, ' found and deleted' )
 spsa_routines.writesangles(angles, p, 1, E_old, outputname2)
+
+# Get good converged energies for comparison
+targets = numpy.empty(4, dtype=numpy.float64)
 
 #-----------------------------------------------------
 # Set up SPSA:
@@ -120,7 +114,7 @@ test = 1.0
 
 outputname3 = 'working_information.txt'
 if os.path.isfile('./' + outputname3):
-    print( 'file 3 found and deleted' )
+    print( outputname3, ' found and deleted' )
     os.remove('./' + outputname3)
 
 #while test > 0.000001:

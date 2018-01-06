@@ -15,7 +15,7 @@ from pybel import ob
 # used as a test for the SPSA optimization.
 def bestconformers(testmolecule, bestenergies):
     force_field = pybel._forcefields["mmff94"]
-    force_field.SetCoordinates(mol.OBMol)
+    force_field.SetCoordinates(testmolecule.OBMol)
 
     outputxyz = open(OpenBabelEnergies.xyz, 'a')
     outputtxt = open(MethodsUsed.txt, 'a')
@@ -31,9 +31,12 @@ def bestconformers(testmolecule, bestenergies):
     outputxyz.close()
     outputtxt.close()
 
+    return bestenergies
+
 # function to write the coordinates for each step in the optimization
 # to an .xyz file:
 def writesxyz(molecule, fname, energy):
+    fname = fname + '.xyz'
     outputfile = open(fname, 'a')
     outputfile.write('{:d}'.format(len(molecule.atoms)))
     outputfile.write('\n')
@@ -108,3 +111,14 @@ def Bernoulli(a, p):
 #d = numpy.random.random(10)
 #d = Bernoulli_numpy_array(d,10)
 #print (d)
+
+def split_uniform(a, p):
+    for i in range (0, p, 1):
+        a[i] = random.random()
+        #if a[i] > 0.5:
+        #    a[i] = 1.0
+        #elif a[i] <= 0.5:
+        #     a[i] = -1.0
+        
+    return a
+
