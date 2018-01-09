@@ -10,6 +10,7 @@ from pybel import ob
 #random.seed(0)
 #numpy.random.seed(0)
 
+#----------------------------------------------------------------------
 # function for determining the lowest energy conformer using different
 # methods that are available in openbabe. These conformers/energies can
 # used as a test for the SPSA optimization.
@@ -20,18 +21,12 @@ def bestconformers(testmolecule, bestenergies):
     outputxyz = open(OpenBabelEnergies.xyz, 'a')
     outputtxt = open(MethodsUsed.txt, 'a')
     #determine energy
-    #write coordinates and energies to xyz file
-    
-    # n
-    # energy
-    # coords ... 
+    #write
 
-    # also, open and print file with names of methods used, in order used
-
-    outputxyz.close()
-    outputtxt.close()
-
-    return bestenergies
+# Basically, need to have a series of minima / structures and energies,
+# for a given initial structure, so that I can compare the results, and
+# identify good calculations / combinations of input parameters.
+#-----------------------------------------------------------------------
 
 # function to write the coordinates for each step in the optimization
 # to an .xyz file:
