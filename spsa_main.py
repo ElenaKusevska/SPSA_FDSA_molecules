@@ -73,10 +73,7 @@ E_old = force_field.Energy(False) # false = don't compute gradients
  
 # Write first set of coordinates to file:
 outputname1 = 'optimization_steps'
-if os.path.isfile('./' + outputname1 + '.xyz'):
-    os.remove('./' + outputname1 + '.xyz')
-    print( outputname1 + '.xyz', ' found and deleted' )
-spsa_routines.writesxyz(mol, outputname1, E_old)
+spsa_routines.writesxyz(mol, outputname1, E_old, overwrite=True)
 
 # Write first set of dihedrals and energy to a file:
 outputname2 = 'angles_energies.txt'
@@ -97,8 +94,8 @@ alpha = 0.602
 gama = 0.101
 
 #assign the other variables:
-c = 0.000005
-smallest_initial_change = 0.0003 # smallest desired magnitude change
+c = 0.00005
+smallest_initial_change = 0.001 # smallest desired magnitude change
 #                                during the early iterations
                                     
 niter = 20.0 # maximum expected/allowed number of iterations
@@ -125,6 +122,7 @@ while k <= 30:
     # compute the k-th coefficients
     ak = a / ((B + k)**alpha)
     ck = c / ((k)**gama)
+    print('ck: ', ck)
 
     # generate the random simultaneous perturbation vector:
     del_k = numpy.empty(p, dtype=numpy.float64)
@@ -177,7 +175,7 @@ while k <= 30:
     mol.OBMol.SetCoordinates(coords_current)
     force_field.SetCoordinates(mol.OBMol)
     E_new = force_field.Energy(False)
-    spsa_routines.writesxyz(mol, outputname1, E_new)
+    spsa_routines.writesxyz(mol, outputname1, E_new, overwrite=False)
     spsa_routines.writesangles(angles, p, k, E_new, outputname2)
     spsa_routines.writesarray(angles, p, outputname3, 'new angles')
 
@@ -199,3 +197,7 @@ while k <= 30:
     E_old = E_new
     k = k + 1
 
+#===============================================================
+# Redo everything with numpy arrays. 
+# Check to make sure that everything is double precision.
+#===============================================================

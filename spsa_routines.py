@@ -7,6 +7,8 @@ import openbabel
 import pybel
 from pybel import ob
 
+import os
+
 #random.seed(0)
 #numpy.random.seed(0)
 
@@ -30,8 +32,16 @@ def bestconformers(testmolecule, bestenergies):
 
 # function to write the coordinates for each step in the optimization
 # to an .xyz file:
-def writesxyz(molecule, fname, energy):
+def writesxyz(molecule, fname, energy, overwrite):
     fname = fname + '.xyz'
+    
+    # If overwriting, delete file if it already exists:
+    if overwrite == True:
+        if os.path.isfile('./' + fname):
+            os.remove('./' + fname)
+            print( fname, ' found and deleted' )
+
+    # edit .xyz file:
     outputfile = open(fname, 'a')
     outputfile.write('{:d}'.format(len(molecule.atoms)))
     outputfile.write('\n')
