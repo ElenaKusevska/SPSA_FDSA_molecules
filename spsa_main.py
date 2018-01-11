@@ -27,8 +27,8 @@ random.seed(0)
 
 # Check if the the correct number of commandline arguments has been used,
 # as in:    python3 spsa_main.py  filename.sdf :
-if (sys.argv) != 2:
-    exit
+if len(sys.argv) != 2:
+    exit()
 
 # read the molecule from the supplied file:
 filename = sys.argv[1]
